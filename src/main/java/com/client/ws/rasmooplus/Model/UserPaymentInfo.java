@@ -30,4 +30,5 @@ public class UserPaymentInfo {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="users_id")
     private User user;
+    private Integer instalments;
 }

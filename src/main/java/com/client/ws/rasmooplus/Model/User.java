@@ -27,7 +27,7 @@ public class User implements Serializable {
     @Column(name="dt_expiration")
     private LocalDate dtExpiration;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="users_type_id")
+    @JoinColumn(name="user_type_id")
     private UserType userType;
     @ManyToOne( fetch = FetchType.LAZY)
     @JoinColumn(name="subscriptions_type_id")
