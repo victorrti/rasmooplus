@@ -21,6 +21,14 @@ public class User implements Serializable {
     private String email;
     private String phone;
     private  String cpf;
-
+    @Column(name="dt_subscription")
     private LocalDate dtSubscription = LocalDate.now();
+    @Column(name="dt_expiration")
+    private LocalDate dtExpiration;
+    @ManyToOne
+    @JoinColumn(name="users_type_id")
+    private UserType userType;
+    @ManyToOne()
+    @JoinColumn(name="subscriptions_type_id")
+    private SubscriptionType subscriptionType;
 }
