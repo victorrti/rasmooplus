@@ -1,8 +1,7 @@
 package com.client.ws.rasmooplus.Model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.cglib.core.Local;
 
 import java.io.Serializable;
@@ -12,6 +11,8 @@ import java.time.LocalDate;
 @Table(name="users")
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
+@Builder
 public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
