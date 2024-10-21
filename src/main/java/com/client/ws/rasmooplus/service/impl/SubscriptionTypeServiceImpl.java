@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+
 @Service
 public class SubscriptionTypeServiceImpl implements SubscriptioTypeService {
     @Autowired
@@ -17,8 +19,12 @@ public class SubscriptionTypeServiceImpl implements SubscriptioTypeService {
     }
 
     @Override
-    public SubscriptionType findById() {
-        return null;
+    public SubscriptionType findById(Long id) {
+        Optional<SubscriptionType> subscriptionTypeOptional = subscriptionTypeRepository.findById(id);
+        if(subscriptionTypeOptional.isEmpty()){
+            return null;
+        }
+        return subscriptionTypeOptional.get();
     }
 
     @Override
