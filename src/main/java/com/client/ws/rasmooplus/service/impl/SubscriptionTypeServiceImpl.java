@@ -4,6 +4,7 @@ import com.client.ws.rasmooplus.Model.SubscriptionType;
 import com.client.ws.rasmooplus.dto.SubscriptionTypeDTO;
 import com.client.ws.rasmooplus.exception.BadRequestException;
 import com.client.ws.rasmooplus.exception.NotFoundException;
+import com.client.ws.rasmooplus.mapper.SubscriptionTypeMapper;
 import com.client.ws.rasmooplus.repository.SubscriptionTypeRepository;
 import com.client.ws.rasmooplus.service.SubscriptioTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,13 +35,14 @@ public class SubscriptionTypeServiceImpl implements SubscriptioTypeService {
         }
 
         return subscriptionTypeRepository.save(
-                montaSubscriptionTypeByDto(dto,null));
+                SubscriptionTypeMapper.fromDtoToEntity(dto));
     }
 
     @Override
     public SubscriptionType update(Long id, SubscriptionTypeDTO dto) {
         getSusbscriptionType(id);
-        return subscriptionTypeRepository.save(montaSubscriptionTypeByDto(dto,id));
+        dto.setId(id);
+        return subscriptionTypeRepository.save(SubscriptionTypeMapper.fromDtoToEntity(dto));
     }
 
     @Override
@@ -57,15 +59,5 @@ public class SubscriptionTypeServiceImpl implements SubscriptioTypeService {
         return subscriptionTypeOptional.get();
     }
 
-    public SubscriptionType montaSubscriptionTypeByDto(SubscriptionTypeDTO dto,Long id){
-         return SubscriptionType.builder()
-                 .id(dto.getId() != null ? dto.getId() : id)
-                .accessMonths(dto.getAccessMonths())
-                .price(dto.getPrice())
-                .name(dto.getName())
-                .productKey(dto.getProductKey())
-                .build();
 
-
-    }
 }

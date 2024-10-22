@@ -5,6 +5,7 @@ import com.client.ws.rasmooplus.dto.SubscriptionTypeDTO;
 import com.client.ws.rasmooplus.exception.NotFoundException;
 import com.client.ws.rasmooplus.repository.SubscriptionTypeRepository;
 import com.client.ws.rasmooplus.service.SubscriptioTypeService;
+import jakarta.validation.Valid;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,7 +29,7 @@ public class SubscriptionTypeController {
         return ResponseEntity.status(HttpStatus.OK).body(subscriptioTypeService.findById(id));
     }
     @PostMapping()
-    public ResponseEntity<SubscriptionType> create(@RequestBody SubscriptionTypeDTO dto){
+    public ResponseEntity<SubscriptionType> create(@Valid @RequestBody SubscriptionTypeDTO dto){
         return ResponseEntity.status(HttpStatus.CREATED).body(subscriptioTypeService.create(dto));
     }
 
