@@ -1,6 +1,7 @@
 package com.client.ws.rasmooplus.controller;
 
 import com.client.ws.rasmooplus.Model.SubscriptionType;
+import com.client.ws.rasmooplus.dto.SubscriptionTypeDTO;
 import com.client.ws.rasmooplus.exception.NotFoundException;
 import com.client.ws.rasmooplus.repository.SubscriptionTypeRepository;
 import com.client.ws.rasmooplus.service.SubscriptioTypeService;
@@ -24,6 +25,10 @@ public class SubscriptionTypeController {
     @GetMapping("/{id}")
     public ResponseEntity<SubscriptionType> findById(@PathVariable("id") Long id){
         return ResponseEntity.status(HttpStatus.OK).body(subscriptioTypeService.findById(id));
+    }
+    @PostMapping()
+    public ResponseEntity<SubscriptionType> create(@RequestBody SubscriptionTypeDTO dto){
+        return ResponseEntity.status(HttpStatus.CREATED).body(subscriptioTypeService.create(dto));
     }
 
 
