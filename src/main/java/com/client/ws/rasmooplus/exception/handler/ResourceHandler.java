@@ -21,7 +21,7 @@ public class ResourceHandler {
         String errorMessage = notFoundException.getMessage();
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(montaErroResponseDto(errorMessage,HttpStatus.NOT_FOUND,HttpStatus.NOT_FOUND.value()));
     }
-    @ExceptionHandler(NotFoundException.class)
+    @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<ErroResponseDto> badRequestException(BadRequestException badRequestException){
         String errorMessage = badRequestException.getMessage();
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(montaErroResponseDto(errorMessage,HttpStatus.BAD_REQUEST,HttpStatus.BAD_REQUEST.value()));
