@@ -60,7 +60,16 @@ public class WsRaspayIntegrationImpl implements WsRaspayIntgration {
 
     @Override
     public Boolean processPayment(PaymentDTO dto) {
-        return null;
+        try{
+            String credentials= "rasmooplus:r@asm00";
+            String base64 = Base64.getEncoder().encodeToString(credentials.getBytes(StandardCharsets.UTF_8));
+            this.headers.add("Authorization","Basic "+base64);
+            HttpEntity<PaymentDTO> request = new HttpEntity<>(this.headers);
+            ResponseEntity<Boolean> response = restTemplate.exchange(URL+"v1/payment/credit-card", HttpMethod.POST,request, Boolean.class);
+            return response.getBody();
+        }catch(Exception e){
+            throw  e;
+        }
     }
 
     private static HttpHeaders getHttpHeaders() {
