@@ -6,6 +6,7 @@ import com.client.ws.rasmooplus.dto.wsraspay.OrderDTO;
 import com.client.ws.rasmooplus.dto.wsraspay.PaymentDTO;
 import org.apache.coyote.Response;
 import org.hibernate.query.Order;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -21,8 +22,14 @@ import java.util.Base64;
 public class WsRaspayIntegrationImpl implements WsRaspayIntgration {
     private RestTemplate restTemplate;
     private final HttpHeaders headers;
-
-    private static final String URL = "http://localhost:80881/ws-raspay/";
+    @Value("${webservices.raspay.host}")
+    private  String raspayHost;
+    @Value("${webservices.raspay.costumer}")
+    private  String raspayCostumer;
+    @Value("${webservices.raspay.payment}")
+    private  String raspayPayment;
+    @Value("${webservices.raspay.order}")
+    private  String raspayorder;
 
     public WsRaspayIntegrationImpl(){
         restTemplate = new RestTemplate();
@@ -36,7 +43,7 @@ public class WsRaspayIntegrationImpl implements WsRaspayIntgration {
             String base64 = Base64.getEncoder().encodeToString(credentials.getBytes(StandardCharsets.UTF_8));
             this.headers.add("Authorization","Basic "+base64);
             HttpEntity<CostumerDTO> request = new HttpEntity<>(costumerDTO,this.headers);
-            ResponseEntity<CostumerDTO> response = restTemplate.exchange(URL+"v1/custumer", HttpMethod.POST,request, CostumerDTO.class);
+            ResponseEntity<CostumerDTO> response = restTemplate.exchange(raspayHost+raspayCostumer, HttpMethod.POST,request, CostumerDTO.class);
             return response.getBody();
         }catch(Exception e){
             throw  e;
@@ -51,7 +58,7 @@ public class WsRaspayIntegrationImpl implements WsRaspayIntgration {
             String base64 = Base64.getEncoder().encodeToString(credentials.getBytes(StandardCharsets.UTF_8));
             this.headers.add("Authorization","Basic "+base64);
             HttpEntity<OrderDTO> request = new HttpEntity<>(orderDTO,this.headers);
-            ResponseEntity<OrderDTO> response = restTemplate.exchange(URL+"v1/order", HttpMethod.POST,request, OrderDTO.class);
+            ResponseEntity<OrderDTO> response = restTemplate.exchange(raspayHost+raspayorder, HttpMethod.POST,request, OrderDTO.class);
             return response.getBody();
         }catch(Exception e){
             throw  e;
@@ -65,7 +72,7 @@ public class WsRaspayIntegrationImpl implements WsRaspayIntgration {
             String base64 = Base64.getEncoder().encodeToString(credentials.getBytes(StandardCharsets.UTF_8));
             this.headers.add("Authorization","Basic "+base64);
             HttpEntity<PaymentDTO> request = new HttpEntity<>(this.headers);
-            ResponseEntity<Boolean> response = restTemplate.exchange(URL+"v1/payment/credit-card", HttpMethod.POST,request, Boolean.class);
+            ResponseEntity<Boolean> response = restTemplate.exchange(raspayHost+raspayPayment, HttpMethod.POST,request, Boolean.class);
             return response.getBody();
         }catch(Exception e){
             throw  e;

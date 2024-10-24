@@ -28,7 +28,7 @@ import org.springframework.boot.test.context.SpringBootTest;
     @Test
     void cretePaymentWhenDtoOk(){
         CreditCardDTO crediCardDto = new CreditCardDTO(123L,"1234432112344321",3L,11L,"1234432112344321",2024L);
-        PaymentDTO dto = new PaymentDTO(crediCardDto,"22994287048","ProductMensal");
+        PaymentDTO dto = new PaymentDTO(crediCardDto,"22994287048","2");
         wsRaspayIntgration.processPayment(dto);
 
     }
