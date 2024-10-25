@@ -2,6 +2,7 @@ package com.client.ws.rasmooplus.exception.handler;
 
 import com.client.ws.rasmooplus.dto.error.ErroResponseDto;
 import com.client.ws.rasmooplus.exception.BadRequestException;
+import com.client.ws.rasmooplus.exception.BusinessException;
 import com.client.ws.rasmooplus.exception.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,6 +41,19 @@ public class ResourceHandler {
                 .httpStatus(HttpStatus.BAD_REQUEST)
                 .statusCode(HttpStatus.BAD_REQUEST.value())
                 .build());
+    }
+
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<ErroResponseDto> badRequestException(BusinessException businessException){
+        String errorMessage = businessException.getMessage();
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(montaErroResponseDto(errorMessage,HttpStatus.CONFLICT,HttpStatus.CONFLICT.value()));
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErroResponseDto> handleGlobalException(Exception exception) {
+        String errorMessage = "Um erro inesperado ocorreu. Tente novamente mais tarde.";
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(montaErroResponseDto(errorMessage, HttpStatus.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR.value()));
     }
     public ErroResponseDto montaErroResponseDto(String message,HttpStatus httpStatus,Integer code){
         return ErroResponseDto.builder().message(message).httpStatus(httpStatus).statusCode(code).build();
