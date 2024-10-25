@@ -6,10 +6,16 @@ import com.client.ws.rasmooplus.Model.UserPaymentInfo;
 import com.client.ws.rasmooplus.dto.PaymentProcessDTO;
 import com.client.ws.rasmooplus.dto.UserPaymentInfoDto;
 import com.client.ws.rasmooplus.dto.wsraspay.CostumerDTO;
+import com.client.ws.rasmooplus.dto.wsraspay.CreditCardDTO;
+import com.client.ws.rasmooplus.dto.wsraspay.OrderDTO;
+import com.client.ws.rasmooplus.dto.wsraspay.PaymentDTO;
 import com.client.ws.rasmooplus.exception.BusinessException;
 import com.client.ws.rasmooplus.exception.NotFoundException;
 import com.client.ws.rasmooplus.mapper.UserPaymentInfoMapper;
 import com.client.ws.rasmooplus.mapper.wsraspay.CostumerMapper;
+import com.client.ws.rasmooplus.mapper.wsraspay.CreditCardMapper;
+import com.client.ws.rasmooplus.mapper.wsraspay.OrderMapper;
+import com.client.ws.rasmooplus.mapper.wsraspay.PaymentMapper;
 import com.client.ws.rasmooplus.repository.UserPaymentInfoRepository;
 import com.client.ws.rasmooplus.repository.UserRepository;
 import com.client.ws.rasmooplus.service.PaymentInfoService;
@@ -40,7 +46,16 @@ public class PaymenteInfoServiceImpl implements PaymentInfoService {
             throw  new BusinessException("Pagamento não podera ser processado pois o usuario já possui assinatura");
         }
         CostumerDTO costumerDTO =  wsRaspayIntgration.createCostumer(CostumerMapper.build(user));
-        UserPaymentInfo userPaymentInfo = UserPaymentInfoMapper.fromDtoToEntity(dto.getUserPaymentInfoDto(),user);
-        userPaymentInfoRepository.save(userPaymentInfo);
+
+
+        OrderDTO orderDTO = wsRaspayIntgration.createOrder(OrderMapper.build(costumerDTO.getId(),dto));
+        CreditCardDTO creditCardDTO = CreditCardMapper.build(dto.getUserPaymentInfoDto(),user.getCpf());
+        PaymentDTO paymentDTO = PaymentMapper.build(costumerDTO.getId(),orderDTO.getId(),creditCardDTO);
+        Boolean processado  = wsRaspayIntgration.processPayment(paymentDTO);
+        if(processado){
+            UserPaymentInfo userPaymentInfo = UserPaymentInfoMapper.fromDtoToEntity(dto.getUserPaymentInfoDto(),user);
+            userPaymentInfoRepository.save(userPaymentInfo);
+        }
+
     }
 }

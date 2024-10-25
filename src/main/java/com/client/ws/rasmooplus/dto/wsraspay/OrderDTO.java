@@ -14,6 +14,6 @@ import java.math.BigDecimal;
 public class OrderDTO {
     private String id;
     private String costumerId;
-    private Long discount;
+    private BigDecimal discount;
     private String productAcronym;
 }
