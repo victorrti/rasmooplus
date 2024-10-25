@@ -1,6 +1,8 @@
 package com.client.ws.rasmooplus.service.impl;
 
+import com.client.ws.rasmooplus.Integration.MailIntegration;
 import com.client.ws.rasmooplus.Integration.WsRaspayIntgration;
+import com.client.ws.rasmooplus.Integration.impl.MailIntegrationImpl;
 import com.client.ws.rasmooplus.Model.User;
 import com.client.ws.rasmooplus.Model.UserPaymentInfo;
 import com.client.ws.rasmooplus.dto.PaymentProcessDTO;
@@ -26,14 +28,22 @@ import java.util.Objects;
 
 @Service
 public class PaymenteInfoServiceImpl implements PaymentInfoService {
-    @Autowired
-    private  UserRepository userRepository;
-    @Autowired
-    private UserPaymentInfoRepository userPaymentInfoRepository;
-    @Autowired
-    private WsRaspayIntgration wsRaspayIntgration;
 
-    public  PaymenteInfoServiceImpl(){}
+    private final  UserRepository userRepository;
+
+    private final UserPaymentInfoRepository userPaymentInfoRepository;
+
+    private final WsRaspayIntgration wsRaspayIntgration;
+    private final MailIntegration mailIntegration;
+
+
+
+    public  PaymenteInfoServiceImpl(UserRepository userRepository, UserPaymentInfoRepository userPaymentInfoRepository, WsRaspayIntgration wsRaspayIntgration, MailIntegration mailIntegration){
+        this.userRepository = userRepository;
+        this.userPaymentInfoRepository = userPaymentInfoRepository;
+        this.wsRaspayIntgration = wsRaspayIntgration;
+        this.mailIntegration = mailIntegration;
+    }
     @Override
     public Boolean process(PaymentProcessDTO dto) {
 
@@ -55,7 +65,10 @@ public class PaymenteInfoServiceImpl implements PaymentInfoService {
         if(processado){
             UserPaymentInfo userPaymentInfo = UserPaymentInfoMapper.fromDtoToEntity(dto.getUserPaymentInfoDto(),user);
             userPaymentInfoRepository.save(userPaymentInfo);
+            mailIntegration.send(user.getEmail(),"Login: "+user.getEmail()+" senha: rasmooAluno","Acesso liberado");
         }
+
+        return processado;
 
     }
 }
