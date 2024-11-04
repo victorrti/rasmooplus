@@ -1,6 +1,6 @@
 package com.client.ws.rasmooplus.controller;
 
-import com.client.ws.rasmooplus.Model.UserType;
+import com.client.ws.rasmooplus.Model.jpa.UserType;
 import com.client.ws.rasmooplus.service.UserTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

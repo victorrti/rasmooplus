@@ -1,7 +1,7 @@
 package com.client.ws.rasmooplus;
 
 import com.client.ws.rasmooplus.Filter.AuthenticationFilter;
-import com.client.ws.rasmooplus.repository.UserDetailsRepository;
+import com.client.ws.rasmooplus.repository.jpa.UserDetailsRepository;
 import com.client.ws.rasmooplus.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -38,7 +38,7 @@ public class WebSecutiryConfig   {
         return web ->
                 web.ignoring()
                         .requestMatchers( AUTH_SWAGGER_LIST)
-                        .requestMatchers(HttpMethod.GET, "/subscription-type")
+                        .requestMatchers(HttpMethod.GET, "/subscription-type/*")
                         .requestMatchers(HttpMethod.POST, "/user")
                         .requestMatchers(HttpMethod.POST, "/payment/process")
                         .requestMatchers(HttpMethod.POST, "/auth")

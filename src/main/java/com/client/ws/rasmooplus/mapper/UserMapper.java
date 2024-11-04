@@ -1,8 +1,8 @@
 package com.client.ws.rasmooplus.mapper;
 
-import com.client.ws.rasmooplus.Model.SubscriptionType;
-import com.client.ws.rasmooplus.Model.User;
-import com.client.ws.rasmooplus.Model.UserType;
+import com.client.ws.rasmooplus.Model.jpa.SubscriptionType;
+import com.client.ws.rasmooplus.Model.jpa.User;
+import com.client.ws.rasmooplus.Model.jpa.UserType;
 import com.client.ws.rasmooplus.dto.UserDto;
 
 public class UserMapper {

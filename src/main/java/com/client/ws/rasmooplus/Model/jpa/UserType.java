@@ -1,4 +1,4 @@
-package com.client.ws.rasmooplus.Model;
+package com.client.ws.rasmooplus.Model.jpa;
 
 import jakarta.persistence.*;
 import lombok.*;

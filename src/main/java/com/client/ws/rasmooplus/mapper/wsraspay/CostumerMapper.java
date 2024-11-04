@@ -1,6 +1,6 @@
 package com.client.ws.rasmooplus.mapper.wsraspay;
 
-import com.client.ws.rasmooplus.Model.User;
+import com.client.ws.rasmooplus.Model.jpa.User;
 import com.client.ws.rasmooplus.dto.wsraspay.CostumerDTO;
 
 public class CostumerMapper {

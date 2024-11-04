@@ -1,8 +1,7 @@
-package com.client.ws.rasmooplus.Model;
+package com.client.ws.rasmooplus.Model.jpa;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.cglib.core.Local;
 
 import java.io.Serializable;
 import java.time.LocalDate;
