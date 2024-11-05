@@ -5,4 +5,6 @@ import com.client.ws.rasmooplus.dto.UserDto;
 
 public interface UserService {
     public User create(UserDto userDto);
+
+
 }
