@@ -2,6 +2,7 @@ package com.client.ws.rasmooplus.service.impl;
 
 import com.client.ws.rasmooplus.Integration.MailIntegration;
 import com.client.ws.rasmooplus.Integration.impl.MailIntegrationImpl;
+import com.client.ws.rasmooplus.Model.jpa.User;
 import com.client.ws.rasmooplus.Model.jpa.UserCredentials;
 import com.client.ws.rasmooplus.Model.redis.UserRecoveryCode;
 import com.client.ws.rasmooplus.exception.BadRequestException;
@@ -10,6 +11,7 @@ import com.client.ws.rasmooplus.repository.jpa.UserDetailsRepository;
 import com.client.ws.rasmooplus.repository.redis.UserRecoveryCodeRepository;
 import com.client.ws.rasmooplus.service.UserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +26,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     UserRecoveryCodeRepository userRecoveryCodeRepository;
     @Autowired
     private MailIntegration mailIntegration;
+    @Value("${webservice.rasplus.redis.recovercody.timeout}")
+    private String recoverTimeOut;
     @Override
     public UserCredentials loadUserByUsernameAndPass(String username, String pass) {
         var userCredentialsOpt = userDetailsRepository.findByUsername(username);
@@ -60,5 +64,20 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         userRecoveryCodeRepository.save(userRecoveryCode);
         mailIntegration.send(email,"Codigo de recuperação de conta "+code,"Codigo de recuperação de conta " +code);
 
+    }
+
+    @Override
+    public Boolean recoveryCodeIsValid(String recoveryCode, String email) {
+        var userRecoveryCodeOpt = userRecoveryCodeRepository.findByEmail(email);
+        if(userRecoveryCodeOpt.isEmpty()){
+            throw new NotFoundException("Usuario não encontrado.");
+        }
+        UserRecoveryCode userRecoveryCode = userRecoveryCodeOpt.get();
+        LocalDateTime timeout = userRecoveryCode.getLocalDateTime().plusMinutes(Long.parseLong(recoverTimeOut));
+        LocalDateTime now = LocalDateTime.now();
+        if(recoveryCode.equals(userRecoveryCode.getCode()) && now.isBefore(timeout)){
+            return true;
+        }
+        return false;
     }
 }
