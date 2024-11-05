@@ -39,7 +39,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     }
 
     @Override
-    public Object sendRecoveryCode(String email) {
+    public void sendRecoveryCode(String email) {
         UserRecoveryCode userRecoveryCode;
         var userRecoveryCodeOpt = userRecoveryCodeRepository.findByEmail(email);
         String code = String.format("%04d", new Random().nextInt(10000));
@@ -59,6 +59,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         userRecoveryCodeRepository.save(userRecoveryCode);
         mailIntegration.send(email,"Codigo de recuperação de conta "+code,"Codigo de recuperação de conta " +code);
-        return null;
+
     }
 }
