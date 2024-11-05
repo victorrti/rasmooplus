@@ -5,6 +5,7 @@ import com.client.ws.rasmooplus.Integration.impl.MailIntegrationImpl;
 import com.client.ws.rasmooplus.Model.jpa.User;
 import com.client.ws.rasmooplus.Model.jpa.UserCredentials;
 import com.client.ws.rasmooplus.Model.redis.UserRecoveryCode;
+import com.client.ws.rasmooplus.dto.UserDetailsDto;
 import com.client.ws.rasmooplus.exception.BadRequestException;
 import com.client.ws.rasmooplus.exception.NotFoundException;
 import com.client.ws.rasmooplus.repository.jpa.UserDetailsRepository;
@@ -12,7 +13,9 @@ import com.client.ws.rasmooplus.repository.redis.UserRecoveryCodeRepository;
 import com.client.ws.rasmooplus.service.UserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -41,6 +44,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         }
         throw  new BadRequestException("Usuario ou senha invalido");
     }
+
+
 
     @Override
     public void sendRecoveryCode(String email) {
@@ -80,4 +85,16 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         }
         return false;
     }
+    @Override
+    public void updatePasswordByRecoveryCode(UserDetailsDto userDetailsDto) {
+        if(recoveryCodeIsValid(userDetailsDto.getRecoveryCode(),userDetailsDto.getEmail())){
+            var userDetailsOpt = userDetailsRepository.findByUsername(userDetailsDto.getEmail());
+            UserCredentials userCredentials = userDetailsOpt.get();
+            userCredentials.setPassword(new BCryptPasswordEncoder().encode(userDetailsDto.getPassword()) );
+            userDetailsRepository.save(userCredentials);
+
+        }
+
+    }
+
 }
