@@ -23,9 +23,10 @@ import com.client.ws.rasmooplus.repository.jpa.UserPaymentInfoRepository;
 import com.client.ws.rasmooplus.repository.jpa.UserRepository;
 import com.client.ws.rasmooplus.repository.jpa.UserTypeRepository;
 import com.client.ws.rasmooplus.service.PaymentInfoService;
+import com.client.ws.rasmooplus.utils.PasswordUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
@@ -80,7 +81,7 @@ public class PaymenteInfoServiceImpl implements PaymentInfoService {
             UserPaymentInfo userPaymentInfo = UserPaymentInfoMapper.fromDtoToEntity(dto.getUserPaymentInfoDto(),user);
             userPaymentInfoRepository.save(userPaymentInfo);
             var userType = userTypeRepository.findById(UserTypeEnum.ALUNO.getId());
-            UserCredentials userCredentials = new UserCredentials(null,user.getNome(),new BCryptPasswordEncoder().encode(defoultPassword),userType.get());
+            UserCredentials userCredentials = new UserCredentials(null,user.getNome(), PasswordUtils.encode(defoultPassword),userType.get());
             userDetailsRepository.save(userCredentials);
             mailIntegration.send(user.getEmail(),"Login: "+user.getEmail()+" senha: rasmooAluno","Acesso liberado");
         }
