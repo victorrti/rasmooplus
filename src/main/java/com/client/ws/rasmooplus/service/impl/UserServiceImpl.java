@@ -31,11 +31,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public User create(UserDto userDto) {
         if(Objects.nonNull(userDto.getId())){
-            throw  new BadRequestException("identificador não pode vir preenchido");        }
+            throw  new BadRequestException("identificador não pode vir preenchido");
+        }
+
         Optional<UserType> userTypeOptional  = userTypeRepository.findById(userDto.getUserTypeId());
+
         if(userTypeOptional.isEmpty()){
             throw new NotFoundException("UserTypeId não informado ou não encontrado");
         }
+
         UserType userType = userTypeOptional.get();
         return userRepository.save(UserMapper.fromDtoToEntity(userDto,userType,null));
 
