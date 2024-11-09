@@ -6,4 +6,9 @@ import java.util.List;
 
 public interface UserTypeService {
     public List<UserType> findAll();
+    public UserType findById(Long id);
+
+    public void delete(Long id);
+
+
 }

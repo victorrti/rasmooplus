@@ -51,7 +51,7 @@ public class ResourceHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErroResponseDto> handleGlobalException(Exception exception) {
-        String errorMessage = "Um erro inesperado ocorreu. Tente novamente mais tarde.";
+        String errorMessage = "Um erro inesperado ocorreu. Tente novamente mais tarde. "+exception.getMessage();
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(montaErroResponseDto(errorMessage, HttpStatus.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR.value()));
     }
