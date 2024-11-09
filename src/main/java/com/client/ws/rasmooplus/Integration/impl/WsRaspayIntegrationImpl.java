@@ -4,6 +4,7 @@ import com.client.ws.rasmooplus.Integration.WsRaspayIntgration;
 import com.client.ws.rasmooplus.dto.wsraspay.CostumerDTO;
 import com.client.ws.rasmooplus.dto.wsraspay.OrderDTO;
 import com.client.ws.rasmooplus.dto.wsraspay.PaymentDTO;
+import com.client.ws.rasmooplus.exception.HttpClientException;
 import org.apache.coyote.Response;
 import org.hibernate.query.Order;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,8 +32,8 @@ public class WsRaspayIntegrationImpl implements WsRaspayIntgration {
     @Value("${webservices.raspay.order}")
     private  String raspayorder;
 
-    public WsRaspayIntegrationImpl(){
-        restTemplate = new RestTemplate();
+    public WsRaspayIntegrationImpl(RestTemplate restTemplate){
+        this.restTemplate = restTemplate;
         headers = getHttpHeaders();
     }
 
@@ -46,7 +47,7 @@ public class WsRaspayIntegrationImpl implements WsRaspayIntgration {
             ResponseEntity<CostumerDTO> response = restTemplate.exchange(raspayHost+raspayCostumer, HttpMethod.POST,request, CostumerDTO.class);
             return response.getBody();
         }catch(Exception e){
-            throw  e;
+            throw new HttpClientException(e.getMessage());
         }
 
     }

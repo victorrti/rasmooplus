@@ -1,4 +1,4 @@
-package com.client.ws.rasmooplus;
+package com.client.ws.rasmooplus.config;
 
 import com.client.ws.rasmooplus.Filter.AuthenticationFilter;
 import com.client.ws.rasmooplus.repository.jpa.UserDetailsRepository;
