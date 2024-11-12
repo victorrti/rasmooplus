@@ -117,6 +117,63 @@ class SubscriptionTypeControllerTest {
         Mockito.verify(subscriptioTypeService,Mockito.times(0)).create(subscriptionTypeDTO);
     }
 
+    @Test
+    void given_update_when_dtoisOk_then_returnSubscriptionTypeUpdate() throws Exception {
+        SubscriptionType subscriptionType = new SubscriptionType();
+        subscriptionType.setId(2L);
+        subscriptionType.setName("ANUAL");
+        subscriptionType.setAccessMonths(12L);
+        subscriptionType.setPrice(BigDecimal.valueOf(2000.00));
+        subscriptionType.setProductKey("PRODANO");
+        SubscriptionTypeDTO subscriptionTypeDTO = new SubscriptionTypeDTO();
+        subscriptionTypeDTO.setId(null);
+        subscriptionTypeDTO.setName("ANUAL");
+        subscriptionTypeDTO.setAccessMonths(12L);
+        subscriptionTypeDTO.setPrice(BigDecimal.valueOf(2000.00));
+        subscriptionTypeDTO.setProductKey("PRODANO");
+
+        Mockito.when(subscriptioTypeService.update(2L,subscriptionTypeDTO)).thenReturn(subscriptionType);
+        mockMvc.perform(MockMvcRequestBuilders.put("/subscription-type/2").contentType(MediaType.APPLICATION_JSON_VALUE).content(objectMapper.writeValueAsString(subscriptionTypeDTO)))
+                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith("application/hal+json"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id",is(2)));
+    }
+
+    @Test
+    void given_Update_when_dtoIsMissingValues_then_throwBadrequestException() throws Exception {
+
+        SubscriptionTypeDTO subscriptionTypeDTO = new SubscriptionTypeDTO();
+        subscriptionTypeDTO.setId(null);
+        subscriptionTypeDTO.setName("");
+        subscriptionTypeDTO.setAccessMonths(13L);
+        subscriptionTypeDTO.setPrice(null);
+        subscriptionTypeDTO.setProductKey("22");
+
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/subscription-type/2").contentType(MediaType.APPLICATION_JSON_VALUE).content(objectMapper.writeValueAsString(subscriptionTypeDTO)))
+                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith("application/json"))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message",is("[price=campo price não pode ser nulo, accessMonths=campo acessMonths não pode ser maior que 12, name=campo name não pode sr nulo ou vazio, productKey=campo productkey deve conter um tamanho  entre 5 e 15]")));
+        Mockito.verify(subscriptioTypeService,Mockito.times(0)).update(2L,subscriptionTypeDTO);
+    }
+
+    @Test
+    void given_Update_when_idIsNullAnddtoIsValidValues_then_throwBadrequestException() throws Exception {
+
+        SubscriptionTypeDTO subscriptionTypeDTO = new SubscriptionTypeDTO();
+        subscriptionTypeDTO.setId(2L);
+        subscriptionTypeDTO.setName("ANUAL");
+        subscriptionTypeDTO.setAccessMonths(12L);
+        subscriptionTypeDTO.setPrice(BigDecimal.valueOf(2000.00));
+        subscriptionTypeDTO.setProductKey("PRODANO");
+
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/subscription-type/").contentType(MediaType.APPLICATION_JSON_VALUE).content(objectMapper.writeValueAsString(subscriptionTypeDTO)))
+                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith("application/json"))
+                .andExpect(MockMvcResultMatchers.status().isInternalServerError());
+        Mockito.verify(subscriptioTypeService,Mockito.times(0)).update(2L,subscriptionTypeDTO);
+    }
+
 
 
 }

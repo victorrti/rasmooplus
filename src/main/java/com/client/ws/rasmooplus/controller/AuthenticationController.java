@@ -8,6 +8,7 @@ import com.client.ws.rasmooplus.exception.BadRequestException;
 import com.client.ws.rasmooplus.service.AuthenticationService;
 import com.client.ws.rasmooplus.service.TokenService;
 import com.client.ws.rasmooplus.service.UserDetailsService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +34,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/recovery-code/send")
-    public ResponseEntity<?> sendRecoveryCode(@RequestBody UserRecoveryCode userRecoveryCode){
+    public ResponseEntity<?> sendRecoveryCode(@Valid  @RequestBody UserRecoveryCode userRecoveryCode){
        userDetailsService.sendRecoveryCode(userRecoveryCode.getEmail());
        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 
@@ -45,7 +46,7 @@ public class AuthenticationController {
 
     }
     @PatchMapping("/recovery-code/password")
-    public ResponseEntity<?> recoveryPassword(@RequestBody UserDetailsDto userDetailsDto){
+    public ResponseEntity<?> recoveryPassword(@RequestBody @Valid UserDetailsDto userDetailsDto){
         userDetailsService.updatePasswordByRecoveryCode(userDetailsDto);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 

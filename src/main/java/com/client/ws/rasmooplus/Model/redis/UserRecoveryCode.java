@@ -1,6 +1,8 @@
 package com.client.ws.rasmooplus.Model.redis;
 
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,6 +20,8 @@ public class UserRecoveryCode {
     @Id
     private String id;
     @Indexed
+    @Email(message = "inválido")
+    @NotBlank(message = "Email invalido")
     private String email;
     private String code;
 
