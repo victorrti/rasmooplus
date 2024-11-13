@@ -54,5 +54,16 @@ class UserControllerTest {
                 MockMvcResultMatchers.status().isOk()
         );
     }
+    @Test
+    void given_downloadPhoto_when_thereIsPhotoInDataBasethen_return200Ok() throws Exception {
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/user/2/photo")
+                .contentType(MediaType.IMAGE_PNG)
+                .contentType(MediaType.IMAGE_JPEG)
+                ).andExpect(
+                    MockMvcResultMatchers.status().isOk()
+                );
+        Mockito.verify(userService,Mockito.times(1)).downloadPhoto(2L);
+    }
 
 }

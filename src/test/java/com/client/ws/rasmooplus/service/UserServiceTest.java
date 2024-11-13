@@ -93,17 +93,18 @@ class UserServiceTest {
 
     }
     @Test
-
     void given_uploadPhoto_thereIsUserAndFileItsPNGOrJPEG_then_UpdatePhotoAndReturnUser() throws Exception{
         FileInputStream fis = new FileInputStream("src/test/resources/static/teste.png");
         MockMultipartFile file = new MockMultipartFile("file","teste.png", MediaType.MULTIPART_FORM_DATA_VALUE,fis);
         User user = getUser();
         user.setId(2L);
-        Mockito.when(userRepository.findById(2L)).thenReturn(Optional.of(user));
-        User userReturn = userService.uploadPhoto(2L,file);
-        Assertions.assertNotNull(userReturn);
-        Assertions.assertNotNull(userReturn.getPhoto());
-        Assertions.assertEquals("teste.png",userReturn.getPhotoName());
+        when(userRepository.findById(2L)).thenReturn(Optional.of(user));
+        when(userRepository.save(any())).thenReturn(user);
+        User userReturned = userService.uploadPhoto(2L, file);
+
+        Assertions.assertNotNull(userReturned);
+        Assertions.assertNotNull(userReturned.getPhoto());
+        Assertions.assertEquals("teste.png",userReturned.getPhotoName());
         Mockito.verify(userRepository, Mockito.times(1)).findById(2L);
 
     }
@@ -133,6 +134,31 @@ class UserServiceTest {
         user.setDtExpiration(userDto.getDtExpiration());
         user.setDtSubscription(userDto.getDtSubscription());
         return user;
+
+    }
+
+    @Test
+    void given_downloadPhoto_thereIsUserAndPhoto_then_returnByteArray() throws Exception{
+        User user = getUser();
+        user.setId(2L);
+        user.setPhoto(new byte[0]);
+        Mockito.when(userRepository.findById(2L)).thenReturn(Optional.of(user));
+
+
+        Assertions.assertNotNull(userService.downloadPhoto(2L));
+        Mockito.verify(userRepository, Mockito.times(1)).findById(2L);
+
+    }
+    @Test
+    void given_downloadPhoto_thereIsUserAndNoPhoto_then_throwBadRequest() throws Exception{
+        User user = getUser();
+        user.setId(2L);
+        user.setPhoto(null);
+        Mockito.when(userRepository.findById(2L)).thenReturn(Optional.of(user));
+
+
+        Assertions.assertThrows(BadRequestException.class,()->userService.downloadPhoto(2L));
+        Mockito.verify(userRepository, Mockito.times(1)).findById(2L);
 
     }
 

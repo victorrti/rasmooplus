@@ -25,8 +25,12 @@ public class UserController {
     }
 
     @PatchMapping(value = "/{id}/upload-photo",consumes = MediaType.MULTIPART_FORM_DATA_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> uploadPhoto(@PathVariable Long id, @RequestPart("file") MultipartFile file) throws IOException {
+    public ResponseEntity<User> uploadPhoto(@PathVariable Long id, @RequestPart("file") MultipartFile file) throws IOException {
         return ResponseEntity.status(HttpStatus.OK).body(userService.uploadPhoto(id,file));
+    }
+    @GetMapping (value = "/{id}/photo",consumes = {MediaType.IMAGE_PNG_VALUE,MediaType.IMAGE_JPEG_VALUE})
+    public ResponseEntity<byte[]> downloadPhoto(@PathVariable Long id) throws IOException {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.downloadPhoto(id));
     }
 
 

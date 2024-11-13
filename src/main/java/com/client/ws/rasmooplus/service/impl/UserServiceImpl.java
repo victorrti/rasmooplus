@@ -68,7 +68,14 @@ public class UserServiceImpl implements UserService {
         return getUser(id);
     }
 
-
+    @Override
+    public byte[] downloadPhoto(Long id) {
+        User user = findById(id);
+        if(Objects.isNull(user.getPhoto())){
+            throw new BadRequestException("Usuario não possui foto");
+        }
+        return user.getPhoto();
+    }
 
 
     public User getUser(Long id){

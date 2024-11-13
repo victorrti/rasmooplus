@@ -82,9 +82,12 @@ class AuthenticationControllerTest {
         UserDetailsDto userDetailsDto = new UserDetailsDto();
         userDetailsDto.setEmail("teste@gmail.com");
         userDetailsDto.setRecoveryCode("3454");
+        userDetailsDto.setPassword("23232");
         Mockito.doNothing().when(userDetailsService).updatePasswordByRecoveryCode(userDetailsDto);
 
-        mockMvc.perform(MockMvcRequestBuilders.patch("/auth/recovery-code/password").contentType(MediaType.APPLICATION_JSON_VALUE).content(objectMapper.writeValueAsString(userDetailsDto)))
+        mockMvc.perform(MockMvcRequestBuilders.patch("/auth/recovery-code/password")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .content(objectMapper.writeValueAsString(userDetailsDto)))
                 .andExpect(
                         MockMvcResultMatchers.status().isNoContent()
 
