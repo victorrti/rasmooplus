@@ -14,13 +14,17 @@ import com.client.ws.rasmooplus.repository.redis.UserRecoveryCodeRepository;
 import com.client.ws.rasmooplus.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
 
 @Service
 public class UserServiceImpl implements UserService {
+    private static final String PNG = ".png";
+    private static final String JPEG = ".jpeg";
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -45,9 +49,27 @@ public class UserServiceImpl implements UserService {
 
     }
 
-    public User findByid(long id){
+    @Override
+    public User uploadPhoto(Long id, MultipartFile file) throws IOException {
+        String imgName = file.getOriginalFilename();
+        String formatPng = imgName.substring(imgName.length()-4);
+        String formatJpeg = imgName.substring(imgName.length()-5);
+        if(!(PNG.equals(formatPng) || JPEG.equals(formatJpeg))){
+            throw new  BadRequestException("Formato do arquivo deve ser JPEG OU PNG.");
+        }
+        User user = findById(id);
+        user.setPhotoName(file.getOriginalFilename());
+        user.setPhoto(file.getBytes());
+        return userRepository.save(user);
+    }
+
+    @Override
+    public User findById(Long id) {
         return getUser(id);
     }
+
+
+
 
     public User getUser(Long id){
         if(Objects.isNull(id)){
@@ -60,6 +82,8 @@ public class UserServiceImpl implements UserService {
         });
         return userOptional.get();
     }
+
+
 
 
 }

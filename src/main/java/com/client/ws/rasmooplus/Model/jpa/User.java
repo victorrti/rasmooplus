@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
+import java.sql.Blob;
 import java.time.LocalDate;
 
 @Entity
@@ -21,6 +22,10 @@ public class User implements Serializable {
     private String email;
     private String phone;
     private  String cpf;
+    @Column(name = "photo_name")
+    private String photoName;
+
+    private byte[] photo;
     @Column(name="dt_subscription")
     private LocalDate dtSubscription = LocalDate.now();
     @Column(name="dt_expiration")
