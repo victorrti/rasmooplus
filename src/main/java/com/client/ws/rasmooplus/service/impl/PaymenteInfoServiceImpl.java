@@ -3,11 +3,9 @@ package com.client.ws.rasmooplus.service.impl;
 import com.client.ws.rasmooplus.Integration.MailIntegration;
 import com.client.ws.rasmooplus.Integration.WsRaspayIntgration;
 import com.client.ws.rasmooplus.Model.jpa.User;
-import com.client.ws.rasmooplus.Model.jpa.UserCredentials;
 import com.client.ws.rasmooplus.Model.jpa.UserPaymentInfo;
 import com.client.ws.rasmooplus.dto.PaymentProcessDTO;
 import com.client.ws.rasmooplus.dto.wsraspay.CostumerDTO;
-import com.client.ws.rasmooplus.dto.wsraspay.CreditCardDTO;
 import com.client.ws.rasmooplus.dto.wsraspay.OrderDTO;
 import com.client.ws.rasmooplus.dto.wsraspay.PaymentDTO;
 import com.client.ws.rasmooplus.enums.UserTypeEnum;
@@ -25,7 +23,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 
-import org.springframework.data.domain.jaxb.SpringDataJaxb;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
@@ -42,8 +39,7 @@ public class PaymenteInfoServiceImpl implements PaymentInfoService {
     WsRaspayIntgration wsRaspayIntgration;
     @Autowired
     MailIntegration mailIntegration;
-    @Autowired
-  UserDetailsRepository userDetailsRepository;
+
     @Autowired
      UserTypeRepository userTypeRepository;
     @Autowired
@@ -88,8 +84,8 @@ public class PaymenteInfoServiceImpl implements PaymentInfoService {
             if (userTypeOpt.isEmpty()) {
                 throw new NotFoundException("UserType não encontrado");
             }
-            UserCredentials userCredentials = new UserCredentials(null, user.getEmail(), PasswordUtils.encode(defoultPassword), userTypeOpt.get());
-            userDetailsRepository.save(userCredentials);
+            //UserCredentials userCredentials = new UserCredentials(null, user.getEmail(), PasswordUtils.encode(defoultPassword), userTypeOpt.get());
+            //userDetailsRepository.save(userCredentials);
 
             var subscriptionTypeOpt = subscriptionTypeRepository.findByProductKey(dto.getProductKey());
 

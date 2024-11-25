@@ -1,7 +1,6 @@
 package com.client.ws.rasmooplus.controller;
 
 
-import com.client.ws.rasmooplus.Model.jpa.UserCredentials;
 import com.client.ws.rasmooplus.Model.redis.UserRecoveryCode;
 import com.client.ws.rasmooplus.dto.UserDetailsDto;
 import com.client.ws.rasmooplus.service.AuthenticationService;
@@ -9,7 +8,6 @@ import com.client.ws.rasmooplus.service.UserDetailsService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.mockito.internal.verification.Times;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureDataJpa;
@@ -23,10 +21,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.time.LocalDateTime;
-
 import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.*;
+
 @AutoConfigureDataJpa
 @AutoConfigureTestDatabase
 @WebMvcTest(AuthenticationController.class)

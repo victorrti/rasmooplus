@@ -1,17 +1,12 @@
 package com.client.ws.rasmooplus.service;
 
-import com.client.ws.rasmooplus.Integration.MailIntegration;
 import com.client.ws.rasmooplus.Integration.impl.MailIntegrationImpl;
-import com.client.ws.rasmooplus.Model.jpa.User;
-import com.client.ws.rasmooplus.Model.jpa.UserCredentials;
 import com.client.ws.rasmooplus.Model.redis.UserRecoveryCode;
 import com.client.ws.rasmooplus.exception.BadRequestException;
 import com.client.ws.rasmooplus.exception.NotFoundException;
-import com.client.ws.rasmooplus.repository.jpa.UserDetailsRepository;
 import com.client.ws.rasmooplus.repository.redis.UserRecoveryCodeRepository;
 import com.client.ws.rasmooplus.service.impl.UserDetailsServiceImpl;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -24,7 +19,6 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
-import java.util.Random;
 
 import static org.mockito.Mockito.*;
 

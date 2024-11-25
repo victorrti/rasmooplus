@@ -4,17 +4,15 @@ import com.client.ws.rasmooplus.Model.redis.UserRecoveryCode;
 import com.client.ws.rasmooplus.dto.LoginDto;
 import com.client.ws.rasmooplus.dto.TokenDto;
 import com.client.ws.rasmooplus.dto.UserDetailsDto;
-import com.client.ws.rasmooplus.exception.BadRequestException;
+
 import com.client.ws.rasmooplus.service.AuthenticationService;
-import com.client.ws.rasmooplus.service.TokenService;
+
 import com.client.ws.rasmooplus.service.UserDetailsService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
+
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -28,7 +26,7 @@ public class AuthenticationController {
 
 
     @PostMapping
-    public ResponseEntity<TokenDto> auth(@RequestBody LoginDto loginDto) {
+    public ResponseEntity<String> auth(@RequestBody LoginDto loginDto) {
         return ResponseEntity.status(HttpStatus.OK).body(authenticationService.auth(loginDto));
 
     }
