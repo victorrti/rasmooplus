@@ -1,15 +1,29 @@
 package com.client.ws.rasmooplus.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.convert.converter.Converter;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
+
+import java.util.Collection;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Configuration
 @EnableWebSecurity
@@ -25,6 +39,8 @@ public class WebSecutiryConfig   {
             "/v2/api-docs/**",
             "/swagger-resources/**"
     };
+    @Value("${keycloak.auth.server-uri}")
+    private String keycloakUri;
 
 
     @Bean
@@ -32,18 +48,33 @@ public class WebSecutiryConfig   {
         return http.authorizeHttpRequests(authorize ->{
 
             authorize.requestMatchers( AUTH_SWAGGER_LIST);
-            authorize.requestMatchers(HttpMethod.GET, "/subscription-type/*").permitAll();
-            authorize.requestMatchers(HttpMethod.POST, "/user/").permitAll();
-            authorize.requestMatchers(HttpMethod.POST, "/payment/process").permitAll();
+
             authorize.requestMatchers(HttpMethod.POST, "/auth").permitAll();
-                    authorize.requestMatchers(HttpMethod.POST, "/auth/refresh-token").permitAll();
-            authorize.requestMatchers( "/auth/recovery-code/*").permitAll();
-            authorize.anyRequest().authenticated();
+            authorize.anyRequest().hasAnyAuthority("CLIENTE_READ_WRITE");
         })
+                .oauth2ResourceServer(auth2 -> auth2.jwt(jwt -> jwt.decoder(jwtDecoder())))
 
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .build();
 
+    }
+
+    @Bean
+    public JwtDecoder jwtDecoder(){
+        return NimbusJwtDecoder.withJwkSetUri(keycloakUri+"/protocol/openid-connect/certs").build();
+    }
+
+    @Bean
+    public JwtAuthenticationConverter jwtAuthenticationConverter(){
+        Converter<Jwt, Collection<GrantedAuthority>> jwtCollectionConverter = jwt ->{
+            Map<String, Object> resourceAcess = jwt.getClaim("real_access");
+            Collection<String> roles = (Collection<String>) resourceAcess.get("roles");
+            return roles.stream().map(SimpleGrantedAuthority::new)
+                    .collect(Collectors.toList());
+        };
+        JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
+        jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(jwtCollectionConverter);
+        return jwtAuthenticationConverter;
     }
 }

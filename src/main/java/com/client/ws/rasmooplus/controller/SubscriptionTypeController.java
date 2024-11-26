@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,6 +19,7 @@ public class SubscriptionTypeController {
     private SubscriptioTypeService subscriptioTypeService;
 
     @GetMapping("/")
+    @PreAuthorize(value="hasAnyAuthority('CLIENT_READ_WHITE')")
     public ResponseEntity<List<SubscriptionType>> findAll(){
         return ResponseEntity.status(HttpStatus.OK).body(subscriptioTypeService.findAll());
     }
