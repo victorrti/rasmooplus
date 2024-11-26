@@ -31,6 +31,7 @@ public class AuthenticationController {
 
     }
 
+
     @PostMapping("/recovery-code/send")
     public ResponseEntity<?> sendRecoveryCode(@Valid  @RequestBody UserRecoveryCode userRecoveryCode){
        userDetailsService.sendRecoveryCode(userRecoveryCode.getEmail());

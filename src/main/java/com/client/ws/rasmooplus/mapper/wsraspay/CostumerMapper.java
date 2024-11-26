@@ -6,7 +6,7 @@ import com.client.ws.rasmooplus.dto.wsraspay.CostumerDTO;
 public class CostumerMapper {
 
     public static CostumerDTO build(User user){
-        var fullName = user.getNome().split(" ");
+        var fullName = user.getName().split(" ");
         var firstName = fullName[0];
         var lastName = fullName.length > 1 ? fullName[firstName.length() -1] : "";
         return CostumerDTO.builder()

@@ -5,4 +5,6 @@ import com.client.ws.rasmooplus.dto.TokenDto;
 
 public interface AuthenticationService {
     String auth(LoginDto dto);
+
+
 }

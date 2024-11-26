@@ -1,17 +1,21 @@
 package com.client.ws.rasmooplus.dto;
 
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-@Getter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class LoginDto {
-    @NotBlank(message="username e obrigatorio")
+
     private String username;
-    @NotBlank(message="Senha e obrigatorio")
+
     private String password;
+    @NotBlank(message="clienteId não pode ser nulo ou vazio")
+    private String clienteId;
+    @NotBlank(message="clienteSecret não pode ser nulo ou vazio")
+    private String clienteSecret;
+    @NotBlank(message="grantType não pode ser nulo ou vazio")
+    private String grantType;
+    private String refreshToken;
 }

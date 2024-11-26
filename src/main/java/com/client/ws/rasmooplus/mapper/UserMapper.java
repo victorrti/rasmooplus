@@ -14,7 +14,7 @@ public class UserMapper {
                 .email(userDto.getEmail())
                 .dtSubscription(userDto.getDtSubscription())
                 .dtExpiration(userDto.getDtExpiration())
-                .nome(userDto.getNome())
+                .name(userDto.getName())
                 .userType(userType)
                 .subscriptionType(subscriptionType)
                 .build();

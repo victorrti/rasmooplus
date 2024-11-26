@@ -12,10 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
+
 public class KeycloakOauthDto {
     private final MultiValueMap<String,String> params = new LinkedMultiValueMap<>();
     public static KeycloakOauthDto builder(){
@@ -50,5 +47,14 @@ public class KeycloakOauthDto {
     public MultiValueMap<String,String> build(){
         return params;
     }
+
+    /*private String cliente_id;
+    private String username;
+    private String grant_type;
+    private String password;
+    private String client_secret;
+    private String refresh_token;*/
+
+
 
 }

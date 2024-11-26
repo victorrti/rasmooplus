@@ -20,7 +20,7 @@ public class UserDto {
     private Long id;
     @NotBlank(message = "O campo nome não pode ser nulo ou vazio")
     @Size(min=4,message = "O campo nome tem tamanho minimo de 4 caracteres")
-    private String nome;
+    private String name;
     @Email(message = "Email invalido")
     private String email;
     @Size(min=11,message = "tamanho minimo de 11 carcteres")
