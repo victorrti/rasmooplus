@@ -48,15 +48,19 @@ public class WebSecutiryConfig   {
         return http.authorizeHttpRequests(authorize ->{
 
             authorize.requestMatchers( AUTH_SWAGGER_LIST);
-
             authorize.requestMatchers(HttpMethod.POST, "/auth").permitAll();
-            authorize.anyRequest().hasAnyAuthority("CLIENTE_READ_WRITE");
-        })
-                .oauth2ResourceServer(auth2 -> auth2.jwt(jwt -> jwt.decoder(jwtDecoder())))
+            authorize.requestMatchers(HttpMethod.POST, "/auth/refresh-token").hasAnyAuthority("CLIENTE_READ_WRITE","ADMIN_READ","ADMIN_WRITE");
+            authorize.requestMatchers(HttpMethod.GET,"/subscription-type").hasAnyAuthority("CLIENTE_READ_WRITE","ADMIN_READ","ADMIN_WRITE");
+            authorize.requestMatchers("/auth/*").hasAnyAuthority("CLIENT_READ_WRITE");
+            authorize.requestMatchers(HttpMethod.POST,"/payment/process").hasAnyAuthority("CLIENTE_READ_WRITE","ADMIN_READ","ADMIN_WRITE");
+            authorize.requestMatchers(HttpMethod.POST,"/user/**").hasAnyAuthority("USER_READ","USER_WRITE","ADMIN_READ","ADMIN_WRITE");
+            authorize.anyRequest().hasAnyAuthority("ADMIN_READ","ADMIN_WRITE");
 
-                .csrf(AbstractHttpConfigurer::disable)
-                .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .build();
+        })
+        .oauth2ResourceServer(auth2 -> auth2.jwt(jwt -> jwt.decoder(jwtDecoder())))
+        .csrf(AbstractHttpConfigurer::disable)
+        .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        .build();
 
     }
 

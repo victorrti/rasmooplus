@@ -7,6 +7,7 @@ import com.client.ws.rasmooplus.service.impl.PaymenteInfoServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +20,7 @@ public class PaymentInfoController {
      PaymentInfoService paymentInfoService;
 
     @PostMapping("/process")
+    @PreAuthorize(value="hasAnyAuthority('CLIENT_READ_WRITE','ADMIN_READ','ADMIN_WRITE')")
     public ResponseEntity<Boolean> process(@RequestBody PaymentProcessDTO dto){
         return ResponseEntity.ok().body(paymentInfoService.process(dto));
     }
